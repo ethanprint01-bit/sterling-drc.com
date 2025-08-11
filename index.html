@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sterling - Vente, Location & Sécurité</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" href="LOGO.png" type="image/png"> <!-- Favicon restauré à l'original -->
+
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Animate.css for animations -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
+    <style>
+        /* Custom styles to integrate logo colors and font */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #ffffff; /* White background */
+            color: #1a1a1a;
+        }
+        
+        /* Logo Colors */
+        .sterling-red { color: #D94F3B; }
+        .sterling-red-bg { background-color: #D94F3B; }
+        .sterling-beige { color: #E8D8C3; }
+        .sterling-beige-bg { background-color: #E8D8C3; }
+
+        /* Smooth scroll behavior */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* --- Preloader --- */
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ffffff; /* White background for loading */
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.5s ease;
+        }
+        #preloader img {
+            animation: pulse 1.5s infinite ease-in-out;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        /* --- Header Styling --- */
+        #main-header {
+            transition: background-color 0.4s ease-out, box-shadow 0.4s ease-out;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+        #main-header.scrolled {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        #main-header.scrolled .nav-link, #main-header.scrolled #mobile-menu-button {
+            color: #374151; /* gray-700 */
+        }
+        #main-header.scrolled .nav-link:hover {
+            color: #D94F3B;
+        }
+        #main-header:not(.scrolled) .nav-link, #main-header:not(.scrolled) #mobile-menu-button {
+            color: white;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+        }
+        #main-header:not(.scrolled) .nav-link:hover {
+            color: #E8D8C3;
+        }
+        
+        /* Active navigation link style */
+        .nav-link.active {
+            color: #D94F3B !important;
+            font-weight: 700;
+        }
+        .nav-link {
+            position: relative;
+            padding-bottom: 8px;
+            cursor: pointer;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 2px;
+            background-color: #D94F3B;
+            transition: width 0.3s ease;
+        }
+        .nav-link.active::after, .nav-link:hover::after {
+            width: 60%;
+        }
+
+        /* Hide sections by default */
+        .page-section {
+            display: none;
+        }
+        .page-section.active {
+            display: block;
+        }
+        
+        /* --- Hero Slider --- */
+        #hero-slider {
+            transition: background-image 1s ease-in-out;
+            height: 100vh;
+        }
+        .hero-content {
+            transition: opacity 1s ease-in-out;
+        }
+
+        /* --- Button Styles --- */
+        .btn-sterling {
+            background-color: #D94F3B;
+            color: white;
+            padding: 12px 28px;
+            border-radius: 8px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(217, 79, 59, 0.2);
+            cursor: pointer;
+        }
+        .btn-sterling:hover {
+            background-color: #b84232;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(217, 79, 59, 0.3);
+        }
+        .btn-secondary {
+            background-color: rgba(255,255,255,0.1);
+            border: 2px solid white;
+            color: white;
+            padding: 10px 26px;
+            border-radius: 8px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .btn-secondary:hover {
+            background-color: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+        }
+
+        /* --- Animation --- */
+        .animate-on-scroll {
+            opacity: 0;
+        }
+        
+        /* --- WhatsApp Button --- */
+        .whatsapp-fab {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background-color: #25D366;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            z-index: 1001;
+            transition: transform 0.3s ease;
+            animation: whatsapp-pulse 2s infinite;
+        }
+        .whatsapp-fab:hover {
+            transform: scale(1.1);
+            animation: none;
+        }
+        @keyframes whatsapp-pulse {
+            0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
+            70% { box-shadow: 0 0 0 20px rgba(37, 211, 102, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+        }
+        
+        /* Mobile Menu Animation */
+        .mobile-menu-hidden {
+            display: none;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- PRELOADER -->
+    <div id="preloader">
+        <img src="LOGO.png" alt="Loading..." class="h-20" onerror="this.style.display='none'; document.getElementById('preloader').innerHTML = 'Chargement...'">
+    </div>
+
+    <!-- HEADER & NAVIGATION -->
+    <header id="main-header">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <!-- Logo -->
+            <div onclick="showPage('accueil')" class="flex items-center space-x-2 cursor-pointer">
+                <img src="LOGO.png" alt="Logo Sterling" id="logo-img" class="h-10" onerror="this.style.display='none'">
+            </div>
+            
+            <!-- Desktop Navigation -->
+            <nav id="desktop-nav" class="hidden md:flex items-center space-x-8">
+                <a class="nav-link" onclick="showPage('accueil', this)">Accueil</a>
+                <a class="nav-link" onclick="showPage('location', this)">Location</a>
+                <a class="nav-link" onclick="showPage('vente', this)">Vente</a>
+                <a class="nav-link" onclick="showPage('securite', this)">Sécurité</a>
+                <a class="nav-link" onclick="showPage('apropos', this)">Qui sommes-nous ?</a>
+                <a class="nav-link" onclick="showPage('contact', this)">Contact</a>
+            </nav>
+            
+            <!-- Mobile Menu Button -->
+            <div class="md:hidden">
+                <button id="mobile-menu-button" class="focus:outline-none">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="mobile-menu-hidden md:hidden bg-white border-t absolute top-full right-0 w-full max-w-xs shadow-lg">
+            <a class="block py-3 px-6 text-gray-700 hover:bg-gray-100" onclick="showPage('accueil'); closeMenu();">Accueil</a>
+            <a class="block py-3 px-6 text-gray-700 hover:bg-gray-100" onclick="showPage('location'); closeMenu();">Location</a>
+            <a class="block py-3 px-6 text-gray-700 hover:bg-gray-100" onclick="showPage('vente'); closeMenu();">Vente</a>
+            <a class="block py-3 px-6 text-gray-700 hover:bg-gray-100" onclick="showPage('securite'); closeMenu();">Sécurité</a>
+            <a class="block py-3 px-6 text-gray-700 hover:bg-gray-100" onclick="showPage('apropos'); closeMenu();">Qui sommes-nous ?</a>
+            <a class="block py-3 px-6 text-gray-700 hover:bg-gray-100" onclick="showPage('contact'); closeMenu();">Contact</a>
+        </div>
+    </header>
+
+    <main>
+        <!-- PAGE: ACCUEIL -->
+        <section id="accueil" class="page-section">
+            <!-- Hero Slider -->
+            <div id="hero-slider" class="relative bg-cover bg-center text-white">
+                <div class="absolute inset-0 bg-black bg-opacity-60 flex flex-col justify-center items-center text-center p-6">
+                    <div id="hero-content-container" class="hero-content">
+                        <h2 id="hero-title" class="text-4xl md:text-6xl font-black tracking-tight leading-tight animate__animated"></h2>
+                        <p id="hero-subtitle" class="mt-4 text-lg md:text-xl max-w-3xl sterling-beige animate__animated"></p>
+                    </div>
+                    <div class="mt-8 flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 animate__animated animate__fadeInUp">
+                        <div class="btn-sterling" onclick="showPage('location')">Louer un véhicule</div>
+                        <div class="btn-secondary" onclick="showPage('securite')">Solutions Sécurité</div>
+                    </div>
+                </div>
+            </div>
+             <!-- Services Overview -->
+            <div class="py-20 bg-white">
+                 <div class="container mx-auto px-6 text-center">
+                    <div class="animate-on-scroll" data-animation="animate__fadeInUp">
+                        <h3 class="text-3xl font-bold mb-2">Un service tout-en-un</h3>
+                        <p class="text-gray-600 max-w-2xl mx-auto mb-12">De l'acquisition à la sécurité, nous couvrons tous vos besoins avec une expertise inégalée.</p>
+                    </div>
+                    <div class="grid md:grid-cols-4 gap-8">
+                        <div class="p-6 transform hover:-translate-y-2 transition-transform duration-300 animate-on-scroll" data-animation="animate__fadeInUp">
+                            <i class="fas fa-car fa-3x sterling-red mb-4"></i>
+                            <h4 class="font-bold text-xl mb-2">Vente</h4>
+                            <p class="text-gray-600">Véhicules neufs et occasions inspectées de haute qualité.</p>
+                        </div>
+                        <div class="p-6 transform hover:-translate-y-2 transition-transform duration-300 animate-on-scroll" data-animation="animate__fadeInUp" style="animation-delay: 0.1s;">
+                            <i class="fas fa-key fa-3x sterling-red mb-4"></i>
+                            <h4 class="font-bold text-xl mb-2">Location</h4>
+                            <p class="text-gray-600">Solutions flexibles, de la courte durée à l'option d'achat.</p>
+                        </div>
+                        <div class="p-6 transform hover:-translate-y-2 transition-transform duration-300 animate-on-scroll" data-animation="animate__fadeInUp" style="animation-delay: 0.2s;">
+                            <i class="fas fa-shield-halved fa-3x sterling-red mb-4"></i>
+                            <h4 class="font-bold text-xl mb-2">Sécurité</h4>
+                            <p class="text-gray-600">Installation professionnelle de caméras de surveillance.</p>
+                        </div>
+                        <div class="p-6 transform hover:-translate-y-2 transition-transform duration-300 animate-on-scroll" data-animation="animate__fadeInUp" style="animation-delay: 0.3s;">
+                            <i class="fas fa-wrench fa-3x sterling-red mb-4"></i>
+                            <h4 class="font-bold text-xl mb-2">Entretien</h4>
+                            <p class="text-gray-600">Service après-vente efficace pour garantir votre tranquillité.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE: LOCATION -->
+        <section id="location" class="page-section py-20 bg-gray-50">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12 animate-on-scroll" data-animation="animate__fadeInUp">
+                    <h2 class="text-4xl font-bold sterling-red">Prenez la route en toute liberté.</h2>
+                    <p class="mt-2 text-xl text-gray-700">Découvrez nos véhicules et trouvez celui qui vous accompagnera demain.</p>
+                </div>
+                 <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+                    <div class="bg-white text-gray-800 rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 animate-on-scroll" data-animation="animate__fadeInUp">
+                        <img src="https://images.unsplash.com/photo-1555215695-3004980ad54e?q=80&w=2070&auto=format&fit=crop" alt="Voiture citadine" class="w-full h-56 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-2xl font-bold mb-2 text-gray-900">Citadine Premium</h3>
+                            <p class="text-gray-600 mb-4">Idéale pour la ville, économique et facile à garer.</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-2xl font-bold sterling-red">50€<span class="text-sm font-normal text-gray-500">/jour</span></span>
+                                <button class="btn-sterling text-sm px-6 py-2">Réserver</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white text-gray-800 rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 animate-on-scroll" data-animation="animate__fadeInUp" style="animation-delay: 0.1s;">
+                        <img src="https://images.unsplash.com/photo-1570355423854-61f73b215b3c?q=80&w=2070&auto=format&fit=crop" alt="SUV Familial" class="w-full h-56 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-2xl font-bold mb-2 text-gray-900">SUV Familial</h3>
+                            <p class="text-gray-600 mb-4">Confort et espace pour vos voyages en famille ou entre amis.</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-2xl font-bold sterling-red">90€<span class="text-sm font-normal text-gray-500">/jour</span></span>
+                                <button class="btn-sterling text-sm px-6 py-2">Réserver</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white text-gray-800 rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 animate-on-scroll" data-animation="animate__fadeInUp" style="animation-delay: 0.2s;">
+                        <img src="https://images.unsplash.com/photo-1605784920839-7b561b821950?q=80&w=1974&auto=format&fit=crop" alt="Utilitaire Pro" class="w-full h-56 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-2xl font-bold mb-2 text-gray-900">Utilitaire Pro</h3>
+                            <p class="text-gray-600 mb-4">Parfait pour vos déménagements ou transports de marchandises.</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-2xl font-bold sterling-red">75€<span class="text-sm font-normal text-gray-500">/jour</span></span>
+                                <button class="btn-sterling text-sm px-6 py-2">Réserver</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE: VENTE -->
+        <section id="vente" class="page-section py-20 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12 animate-on-scroll" data-animation="animate__fadeInUp">
+                    <h2 class="text-4xl font-bold sterling-red">Trouvez le partenaire de route idéal.</h2>
+                    <p class="mt-2 text-xl text-gray-700">Une sélection rigoureuse de véhicules neufs et d'occasion pour vous satisfaire.</p>
+                </div>
+                 <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+                    <div class="bg-gray-50 text-gray-800 rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 animate-on-scroll" data-animation="animate__fadeInUp">
+                        <div class="relative"><img src="https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?q=80&w=2070&auto=format&fit=crop" alt="Berline de luxe" class="w-full h-56 object-cover"><span class="absolute top-4 left-4 sterling-red-bg text-white text-sm font-bold px-3 py-1 rounded">Occasion</span></div>
+                        <div class="p-6">
+                            <h3 class="text-2xl font-bold mb-2 text-gray-900">Berline de Luxe</h3>
+                            <p class="text-gray-600 mb-4">Modèle 2022, 35 000 km. État impeccable.</p>
+                            <div class="flex justify-between items-center"><span class="text-2xl font-bold sterling-red">45 000€</span><button class="btn-sterling text-sm px-6 py-2">Détails</button></div>
+                        </div>
+                    </div>
+                    <div class="bg-gray-50 text-gray-800 rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 animate-on-scroll" data-animation="animate__fadeInUp" style="animation-delay: 0.1s;">
+                        <div class="relative"><img src="https://images.unsplash.com/photo-1580273916550-e323be2ae537?q=80&w=1964&auto=format&fit=crop" alt="Voiture de sport" class="w-full h-56 object-cover"><span class="absolute top-4 left-4 sterling-red-bg text-white text-sm font-bold px-3 py-1 rounded">Neuf</span></div>
+                        <div class="p-6">
+                            <h3 class="text-2xl font-bold mb-2 text-gray-900">Coupé Sport</h3>
+                            <p class="text-gray-600 mb-4">Modèle 2024 sur commande. Personnalisable.</p>
+                            <div class="flex justify-between items-center"><span class="text-xl font-bold sterling-red">Sur devis</span><button class="btn-sterling text-sm px-6 py-2">Devis</button></div>
+                        </div>
+                    </div>
+                    <div class="bg-gray-50 text-gray-800 rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 animate-on-scroll" data-animation="animate__fadeInUp" style="animation-delay: 0.2s;">
+                         <div class="relative"><img src="https://images.unsplash.com/photo-1617789942132-34545a38a02c?q=80&w=1964&auto=format&fit=crop" alt="4x4 Aventure" class="w-full h-56 object-cover"><span class="absolute top-4 left-4 sterling-red-bg text-white text-sm font-bold px-3 py-1 rounded">Occasion</span></div>
+                        <div class="p-6">
+                            <h3 class="text-2xl font-bold mb-2 text-gray-900">4x4 Aventure</h3>
+                            <p class="text-gray-600 mb-4">Modèle 2021, 60 000 km. Prêt pour l'aventure.</p>
+                            <div class="flex justify-between items-center"><span class="text-2xl font-bold sterling-red">38 000€</span><button class="btn-sterling text-sm px-6 py-2">Détails</button></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE: SÉCURITÉ -->
+        <section id="securite" class="page-section py-20 bg-gray-50">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12 animate-on-scroll" data-animation="animate__fadeInUp">
+                    <h2 class="text-4xl font-bold sterling-red">Votre tranquillité d'esprit, notre priorité absolue.</h2>
+                    <p class="mt-2 text-xl max-w-3xl mx-auto text-gray-700">Spécialisés dans la sécurité électronique, nous proposons la vente et l’installation de caméras de surveillance.</p>
+                </div>
+                <div class="my-16 grid md:grid-cols-2 gap-12 items-center">
+                    <div class="animate-on-scroll" data-animation="animate__fadeInLeft">
+                        <h3 class="text-3xl font-bold mb-6 text-gray-900">Nos services, votre sérénité</h3>
+                        <ul class="space-y-4 text-lg text-gray-600">
+                            <li class="flex items-start"><i class="fas fa-check-circle sterling-red mt-1 mr-3"></i> <div><strong>Conseil & audit sur site :</strong> Nous évaluons vos besoins pour une solution parfaitement adaptée.</div></li>
+                            <li class="flex items-start"><i class="fas fa-check-circle sterling-red mt-1 mr-3"></i> <div><strong>Vente et Installation professionnelle :</strong> Propre, discrète et réalisée par des techniciens certifiés.</div></li>
+                            <li class="flex items-start"><i class="fas fa-check-circle sterling-red mt-1 mr-3"></i> <div><strong>Configuration complète :</strong> Accès mobile, enregistrement cloud ou local (DVR/NVR).</div></li>
+                            <li class="flex items-start"><i class="fas fa-check-circle sterling-red mt-1 mr-3"></i> <div><strong>Maintenance & support :</strong> Nous restons à vos côtés pour garantir un système toujours opérationnel.</div></li>
+                        </ul>
+                    </div>
+                    <div class="animate-on-scroll" data-animation="animate__fadeInRight">
+                        <img src="https://images.unsplash.com/photo-1588497836228-a2d3b38c6523?q=80&w=1964&auto=format&fit=crop" class="rounded-lg shadow-2xl" alt="Caméra de sécurité">
+                    </div>
+                </div>
+                 <div class="text-center mt-16 animate-on-scroll" data-animation="animate__fadeInUp">
+                    <h3 class="text-3xl font-bold text-gray-900">Prêt à sécuriser votre espace ?</h3>
+                    <p class="mt-2 mb-6 text-xl text-gray-700">Contactez-nous pour une étude personnalisée et un devis gratuit.</p>
+                    <div class="btn-sterling text-lg" onclick="showPage('contact')">Demander un devis</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE: À PROPOS -->
+        <section id="apropos" class="page-section py-20 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12 animate-on-scroll" data-animation="animate__fadeInUp">
+                    <h2 class="text-4xl font-bold sterling-red">L'excellence est notre moteur.</h2>
+                    <p class="mt-2 text-xl text-gray-700">Sterling : l'excellence qui frôle la perfection.</p>
+                </div>
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <div class="animate-on-scroll" data-animation="animate__fadeInLeft">
+                        <h3 class="text-3xl font-bold mb-4 text-gray-900">Notre Mission</h3>
+                        <p class="mb-4 text-lg text-gray-600">
+                            Nous sommes une entreprise spécialisée dans la vente de véhicules neufs et d’occasion et la location à court et long terme. Nous proposons des véhicules qui s’accommodent à votre utilisation et votre particularité, y compris des véhicules utilitaires et des engins spécifiques.
+                        </p>
+                        <p class="text-lg text-gray-600">
+                            Notre service tout-en-un inclut l’entretien, la réparation, le dépannage et des offres de financement pour faciliter votre acquisition automobile.
+                        </p>
+                    </div>
+                    <div class="animate-on-scroll" data-animation="animate__fadeInRight">
+                        <img src="https://images.unsplash.com/photo-1568605117036-5fe5e7185743?q=80&w=2070&auto=format&fit=crop" class="rounded-lg shadow-xl w-full">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE: CONTACT -->
+        <section id="contact" class="page-section py-20 bg-gray-50">
+            <div class="container mx-auto px-6">
+                 <div class="text-center mb-12 animate-on-scroll" data-animation="animate__fadeInUp">
+                    <h2 class="text-4xl font-bold sterling-red">Contactez-nous.</h2>
+                    <p class="mt-2 text-xl text-gray-700">Notre équipe est à votre écoute pour vous conseiller.</p>
+                </div>
+                <div class="grid md:grid-cols-2 gap-12">
+                    <!-- Contact Form -->
+                    <div class="bg-white p-8 rounded-lg shadow-xl animate-on-scroll" data-animation="animate__fadeInLeft">
+                        <h3 class="text-2xl font-bold mb-6 text-gray-900">Envoyez-nous un message</h3>
+                         <form action="send_email.php" method="POST">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                <input type="text" name="Nom" placeholder="Nom" class="w-full p-3 bg-gray-100 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400" required>
+                                <input type="email" name="Email" placeholder="Email" class="w-full p-3 bg-gray-100 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400" required>
+                            </div>
+                            <div class="mb-4">
+                                <input type="text" name="Sujet" placeholder="Sujet" class="w-full p-3 bg-gray-100 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400" required>
+                            </div>
+                            <div class="mb-4">
+                                <textarea name="Message" placeholder="Votre message..." rows="5" class="w-full p-3 bg-gray-100 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400" required></textarea>
+                            </div>
+                            <div class="text-left">
+                                <button type="submit" class="btn-sterling">Envoyer</button>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- Contact Info -->
+                    <div class="space-y-6 animate-on-scroll" data-animation="animate__fadeInRight">
+                        <div class="bg-white p-6 rounded-lg shadow-lg flex items-start space-x-4">
+                            <i class="fas fa-map-marker-alt text-2xl sterling-red mt-1"></i>
+                            <div>
+                                <h4 class="font-bold text-xl text-gray-900">Adresse</h4>
+                                <p class="text-gray-600">123 Avenue des Rêves, Kinshasa, RDC</p>
+                            </div>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow-lg flex items-start space-x-4">
+                            <i class="fas fa-phone-alt text-2xl sterling-red mt-1"></i>
+                            <div>
+                                <h4 class="font-bold text-xl text-gray-900">Téléphone</h4>
+                                <p class="text-gray-600">+243 81 234 5678</p>
+                            </div>
+                        </div>
+                         <div class="bg-white p-6 rounded-lg shadow-lg flex items-start space-x-4">
+                            <i class="fas fa-envelope text-2xl sterling-red mt-1"></i>
+                            <div>
+                                <h4 class="font-bold text-xl text-gray-900">Email</h4>
+                                <p class="text-gray-600">gracelukosingoy@gmail.com</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer class="bg-gray-900 text-gray-300 pt-16 pb-12">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
+                <!-- About -->
+                <div class="px-4">
+                    <h3 class="text-lg font-bold text-white mb-4">STERLING</h3>
+                    <p class="text-sm">Votre partenaire de confiance pour la vente, la location et la sécurité automobile. L'excellence est notre moteur.</p>
+                </div>
+                <!-- Contacts -->
+                <div class="px-4">
+                    <h3 class="text-lg font-bold text-white mb-4">Contact</h3>
+                    <div class="space-y-2 text-sm">
+                        <p><i class="fas fa-map-marker-alt fa-fw mr-2"></i>123 Avenue des Rêves, Kinshasa, RDC</p>
+                        <p><i class="fas fa-phone-alt fa-fw mr-2"></i>+243 980066757</p>
+                        <p><i class="fas fa-envelope fa-fw mr-2"></i>gracelukosingoy@gmail.com</p>
+                    </div>
+                </div>
+                <!-- Social -->
+                <div class="px-4">
+                    <h3 class="text-lg font-bold text-white mb-4">Suivez-nous</h3>
+                    <div class="flex justify-center md:justify-start space-x-4">
+                        <a href="#" class="text-gray-300 hover:text-white transition-colors duration-300"><i class="fab fa-facebook-f fa-lg"></i></a>
+                        <a href="#" class="text-gray-300 hover:text-white transition-colors duration-300"><i class="fab fa-instagram fa-lg"></i></a>
+                        <a href="#" class="text-gray-300 hover:text-white transition-colors duration-300"><i class="fab fa-linkedin-in fa-lg"></i></a>
+                        <a href="#" class="text-300 hover:text-white transition-colors duration-300"><i class="fab fa-twitter fa-lg"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-12 pt-8 text-center text-sm">
+                <p class="text-gray-500">&copy; 2024 grace lukosi. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- WhatsApp Floating Button -->
+    <a href="https://wa.me/243812345678" target="_blank" class="whatsapp-fab">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const preloader = document.getElementById('preloader');
+        const mainHeader = document.getElementById('main-header');
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const desktopNavLinks = document.querySelectorAll('#desktop-nav .nav-link');
+
+        // --- Preloader ---
+        window.addEventListener('load', () => {
+            preloader.style.opacity = '0';
+            setTimeout(() => {
+                preloader.style.display = 'none';
+            }, 500);
+        });
+
+        // --- Header Scroll Effect ---
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                mainHeader.classList.add('scrolled');
+            } else {
+                mainHeader.classList.remove('scrolled');
+            }
+        });
+
+        // --- Mobile Menu ---
+        mobileMenuButton.addEventListener('click', () => {
+            const isHidden = mobileMenu.classList.contains('mobile-menu-hidden');
+            if (isHidden) {
+                mobileMenu.classList.remove('mobile-menu-hidden');
+                mobileMenu.classList.add('animate__animated', 'animate__slideInRight');
+            } else {
+                mobileMenu.classList.remove('animate__slideInRight');
+                mobileMenu.classList.add('animate__slideOutRight');
+                mobileMenu.addEventListener('animationend', () => {
+                    mobileMenu.classList.add('mobile-menu-hidden');
+                    mobileMenu.classList.remove('animate__animated', 'animate__slideOutRight');
+                }, { once: true });
+            }
+        });
+
+        window.closeMenu = () => {
+            mobileMenu.classList.remove('animate__slideInRight');
+            mobileMenu.classList.add('animate__animated', 'animate__slideOutRight');
+            mobileMenu.addEventListener('animationend', () => {
+                    mobileMenu.classList.add('mobile-menu-hidden');
+                    mobileMenu.classList.remove('animate__animated', 'animate__slideOutRight');
+            }, { once: true });
+        };
+
+        // --- Hero Slider ---
+        const heroSlider = document.getElementById('hero-slider');
+        const heroTitle = document.getElementById('hero-title');
+        const heroSubtitle = document.getElementById('hero-subtitle');
+        const slides = [
+            // Reverted to original slides (without herolocation.jpg)
+            {
+                img: 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=2070&auto=format&fit=crop',
+                title: "STERLING : L'EXCELLENCE AUTOMOBILE",
+                subtitle: "Votre partenaire de confiance pour la vente, la location et la sécurité."
+            },
+            {
+                img: 'https://images.unsplash.com/photo-1541443131876-44b03de101c5?q=80&w=2070&auto=format&fit=crop',
+                title: "PRENEZ LA ROUTE EN TOUTE LIBERTÉ",
+                subtitle: "Des solutions de location flexibles pour chaque trajet de votre vie."
+            },
+            {
+                img: 'https://images.unsplash.com/photo-1559124140-c44b9c16e1a4?q=80&w=2070&auto=format&fit=crop',
+                title: "SÉCURITÉ ET SÉRÉNITÉ",
+                subtitle: "Protégez ce qui compte le plus avec nos systèmes de surveillance de pointe."
+            }
+        ];
+        let currentSlide = 0;
+
+        function updateHero() {
+            if (!heroSlider) return;
+            
+            heroTitle.classList.remove('animate__fadeInDown');
+            heroSubtitle.classList.remove('animate__fadeInUp');
+            
+            heroSlider.style.backgroundImage = `url('${slides[currentSlide].img}')`;
+            heroTitle.textContent = slides[currentSlide].title;
+            heroSubtitle.textContent = slides[currentSlide].subtitle;
+
+            // Re-trigger animation
+            void heroTitle.offsetWidth; // trick to restart animation
+            heroTitle.classList.add('animate__fadeInDown');
+            heroSubtitle.classList.add('animate__fadeInUp');
+
+            currentSlide = (currentSlide + 1) % slides.length;
+        }
+
+        if (heroSlider) {
+            updateHero();
+            setInterval(updateHero, 5000);
+        }
+
+        // --- SPA Navigation ---
+        window.showPage = (pageId, clickedLink) => {
+            document.querySelectorAll('.page-section').forEach(section => {
+                section.classList.remove('active', 'animate__animated', 'animate__fadeIn');
+            });
+
+            const targetPage = document.getElementById(pageId);
+            if (targetPage) {
+                targetPage.classList.add('active', 'animate__animated', 'animate__fadeIn');
+                window.scrollTo(0, 0); // Scroll to top of new "page"
+            }
+
+            // Update active link style
+            desktopNavLinks.forEach(link => link.classList.remove('active'));
+            if (clickedLink) {
+                clickedLink.classList.add('active');
+            } else {
+                // Find link by data attribute for mobile/other clicks
+                const activeLink = document.querySelector(`#desktop-nav .nav-link[onclick*="'${pageId}'"]`);
+                if(activeLink) activeLink.classList.add('active');
+            }
+        };
+
+        // --- Initial Page Load ---
+        showPage('accueil', document.querySelector('#desktop-nav .nav-link'));
+
+        // --- Animate on Scroll (for elements inside pages) ---
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const animation = entry.target.getAttribute('data-animation');
+                    entry.target.classList.add('animate__animated', animation);
+                    entry.target.classList.remove('animate-on-scroll');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.15 });
+
+        document.querySelectorAll('.animate-on-scroll').forEach((el) => {
+            observer.observe(el);
+        });
+    });
+    </script>
+</body>
+</html>
